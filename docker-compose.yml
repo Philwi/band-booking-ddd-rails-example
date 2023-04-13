@@ -1,0 +1,37 @@
+version: "3.4"
+services:
+  # redis:
+  #   image: "redis:alpine"
+  #   volumes:
+  #     - ./volumes/.redis:/data
+  #   ports:
+  #     - "6379:6379"
+  app:
+    ports:
+      - "8000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+      - ./config/database.docker.yml:/usr/src/app/config/database.yml
+    image: ddd_example_rails_image
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+  db:
+    image: postgres:14.0
+    ports:
+      - "5433:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - ./volumes/.dbdata:/var/lib/postgresql/data/pgdata

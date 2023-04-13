@@ -5,3 +5,25 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+10.times do
+  Band.create(
+    name: Faker::Music.band,
+    genre: Faker::Music.genre,
+    country: Faker::Address.country,
+    city: Faker::Address.city,
+    state: Faker::Address.state,
+    website: Faker::Internet.url,
+    facebook: Faker::Internet.url
+  )
+end
+
+10.times do
+  BookingContract.create(
+    band_id: Band.all.sample.id,
+    price: Faker::Commerce.price,
+    date: Faker::Date.between(from: 1.year.ago, to: 1.year.from_now),
+    time: Faker::Time.between(from: DateTime.now - 1, to: DateTime.now),
+    duration: Faker::Time.between(from: DateTime.now - 1, to: DateTime.now),
+    status: Faker::Boolean.boolean
+  )
+end
